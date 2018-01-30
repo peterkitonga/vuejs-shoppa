@@ -34,7 +34,7 @@
                 <div class="jumbotron jumbotron-fluid">
                     <div class="container">
                         <h4 class="display-4">Json Payload</h4>
-                        <pre>{{ $data | json }}</pre>
+                        <pre>{{ $data }}</pre>
                     </div>
                 </div>
             </div>
@@ -44,15 +44,13 @@
     <!-- VueJS JavaScript -->
     <script src="assets/vuejs/vue.js"></script>
     <script>
-        var data = {
-            sum: 10+10, 
-            subtrack: 20+10,
-            check: true
-        };
-
         var app = new Vue({
             el: '#app',
-            data: data
+            data: {
+                sum: 10+10,
+                subtrack: 20+10,
+                check: true
+            }
         });
     </script>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
