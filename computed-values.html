@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Shoppa</title>
+</head>
+<body>
+    <nav class="navbar navbar-light bg-light justify-content-between">
+        <a class="navbar-brand">Navbar</a>
+        <form class="form-inline">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </nav>
+    <div class="container" id="app">
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <h4 class="display-4">Outputs</h4>
+                <div class="form-group">
+                    <label for="select-check">Subtract Values</label>
+                    <select id="select-check" class="custom-select" v-model="selectorQuery">
+                        <option disabled>Select One</option>
+                        <option v-for="car in cars" :value="car.make">{{ car.make | uppercase }}</option>
+                    </select>
+                </div>
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start" v-for="car in filteredItems">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ car.make | uppercase }}: {{ car.model }}</h5>
+                            <small>{{ car.price | currency }}</small>
+                        </div>
+                        <p class="mb-1">{{ car.description }}</p>
+                        <small>Date: {{ car.date | dateFormat }}</small>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="jumbotron jumbotron-fluid">
+                    <div class="container">
+                        <h4 class="display-4">Json Payload</h4>
+                        <pre>{{ $data }}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VueJS JavaScript -->
+    <script src="assets/vuejs/vue.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                selectorQuery: 'Ford',
+                cars: [
+                    {
+                        id: 1,
+                        make: 'Ford',
+                        model: 'Ranger',
+                        date: '2013-05',
+                        price: '2700000',
+                        description: 'Lorem ipsum dolor amet thundercats post-ironic chambray af sustainable ugh cliche slow-carb shoreditch snackwave gochujang. Iceland blog trust fund listicle sartorial tilde snackwave thundercats woke neutra direct trade selvage. Unicorn coloring book brunch lomo kombucha yr 3 wolf moon chambray blue bottle tbh.'
+                    },
+                    {
+                        id: 2,
+                        make: 'Mazda',
+                        model: 'Atenza - 6',
+                        date: '2012-01',
+                        price: '1500000',
+                        description: '8-bit health goth letterpress hoodie, organic bitters beard bicycle rights aesthetic la croix bushwick vegan gastropub. Literally wayfarers chambray art party sriracha crucifix ennui. Letterpress hoodie before they sold out, vexillologist lomo synth cliche leggings master cleanse DIY distillery austin sartorial scenester.'
+                    },
+                    {
+                        id: 3,
+                        make: 'Audi',
+                        model: 'SQ5',
+                        date: '2014-12',
+                        price: '3400000',
+                        description: 'Try-hard master cleanse skateboard, hexagon echo park enamel pin tbh umami YOLO roof party typewriter direct trade salvia small batch. Four loko banjo gastropub keytar gochujang XOXO you probably haven\'t heard of them bitters celiac fashion axe poutine.'
+                    },
+                    {
+                        id: 4,
+                        make: 'BMW',
+                        model: 'M5',
+                        date: '2017-08',
+                        price: '8400000',
+                        description: 'Chia banh mi fixie, hella tbh tote bag bicycle rights hell of health goth locavore gochujang vegan etsy cred squid. Roof party godard subway tile succulents disrupt health goth poke distillery unicorn swag fashion axe lo-fi ramps hella. Chambray fashion axe affogato, VHS slow-carb cronut woke letterpress dreamcatcher trust fund polaroid viral neutra.'
+                    },
+                    {
+                        id: 5,
+                        make: 'Jaguar',
+                        model: 'F-Pace Sport',
+                        date: '2018-11',
+                        price: '6400000',
+                        description: 'Blue bottle godard yuccie slow-carb yr, microdosing vaporware cold-pressed whatever pork belly. Iceland kale chips blue bottle +1 health goth. La croix tumeric shaman venmo, seitan shabby chic letterpress pok pok.'
+                    }
+                ]
+            },
+            filters: {
+                dateFormat: function(value) {
+                    // Define options for date format
+                    var options = {year: 'numeric', month: 'long', timezone: 'Africa/Nairobi'};
+
+                    // Format date to desired format
+                    return new Intl.DateTimeFormat('en-US', options).format(new Date(value));
+                },
+                uppercase: function (value) {
+                    // Convert string value to uppercase
+                    return value.toUpperCase();
+                },
+                currency: function (value) {
+                    // Parse value to a float
+                    var number = parseFloat(value).toFixed(2);
+
+                    // Insert thousands separator
+                    return 'KES ' + new Intl.NumberFormat().format(number);
+                }
+            },
+            computed: {
+                filteredItems: function() {
+                    var self = this;
+
+                    return self.cars.filter(function(car) {
+                        return car.make.indexOf(self.selectorQuery) !== -1;
+                    });
+                }
+            }
+        });
+    </script>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="assets/jquery/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
