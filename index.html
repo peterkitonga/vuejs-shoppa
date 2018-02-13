@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Shoppa</title>
+</head>
+<body>
+    <nav class="navbar navbar-light bg-light justify-content-between">
+        <a class="navbar-brand">Navbar</a>
+        <form class="form-inline">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </nav>
+    <div class="container" id="app">
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <p class="lead">
+                    Products
+                </p>
+                <div class="form-group">
+                    <label for="search-field">Search a Product</label>
+                    <input type="text" class="form-control" id="search-field" v-model="search">
+                </div>
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start" v-for="product in filteredItems">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ product.name | uppercase }}</h5>
+                        </div>
+                        <p class="mb-1">{{ product.description }}</p>
+                        <ul>
+                            <li v-for="option in product.options"><b>Name: {{ option.details }}</b><small> {{ option.price | currency }}</small></li>
+                        </ul>
+                    </a>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6">
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="jumbotron jumbotron-fluid">
+                    <div class="container">
+                        <h4 class="display-4">Json Payload</h4>
+                        <pre>{{ $data }}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VueJS JavaScript -->
+    <script src="assets/vuejs/vue.js"></script>
+    <script>
+        var inventory = [
+            {
+                'name': 'USB Stick',
+                'description': 'Lorem ipsum dolor amet sustainable narwhal man braid etsy freegan. Shoreditch slow-carb literally quinoa tbh freegan roof party hoodie photo booth wayfarers. Ennui cornhole post-ironic waistcoat. Poutine authentic vexillologist helvetica gochujang, neutra meggings edison bulb bicycle rights four loko.',
+                'options': [
+                    {
+                        'id': 1,
+                        'details': '16GB',
+                        'price': '650'
+                    },
+                    {
+                        'id': 2,
+                        'details': '32GB',
+                        'price': '1050'
+                    },
+                    {
+                        'id': 3,
+                        'details': '64GB',
+                        'price': '1650'
+                    }
+                ]
+            },
+            {
+                'name': 'USB Plug',
+                'description': ' Ethical pok pok flannel, cold-pressed poutine messenger bag dreamcatcher wolf brooklyn adaptogen hammock four dollar toast blue bottle gochujang asymmetrical. Poutine food truck hell of palo santo subway tile photo booth post-ironic art party gastropub bitters actually. Selfies pickled try-hard +1 celiac dreamcatcher.',
+                'options': [
+                    {
+                        'id': 4,
+                        'details': 'Micro USB to Type-A',
+                        'price': '1000'
+                    },
+                    {
+                        'id': 5,
+                        'details': 'Type-C to Type-C',
+                        'price': '2000'
+                    }
+                ]
+            },
+            {
+                'name': 'Televisions',
+                'description': 'Chartreuse before they sold out keytar snackwave. Woke put a bird on it narwhal austin thundercats listicle semiotics. Irony etsy cardigan helvetica. Messenger bag lyft XOXO iceland migas cred fixie paleo umami fashion axe. Sriracha salvia kale chips, plaid PBR&B direct trade ennui. Mustache vaporware chartreuse tumeric leggings seitan.',
+                'options': [
+                    {
+                        'id': 6,
+                        'details': 'Samsung 4K UHD 40 inch TV',
+                        'price': '75000'
+                    },
+                    {
+                        'id': 7,
+                        'details': 'LG OLED Curved 40 inch TV',
+                        'price': '300000'
+                    },
+                    {
+                        'id': 8,
+                        'details': 'HiSense Full HD 40 inch TV',
+                        'price': '55000'
+                    },
+                    {
+                        'id': 9,
+                        'details': 'LG HD LED 40 inch TV',
+                        'price': '56000'
+                    }
+                ]
+            },
+            {
+                'name': 'Phones',
+                'description': 'Tumblr flannel chia, green juice pork belly farm-to-table blue bottle vegan. Pour-over direct trade cliche meditation. You probably haven\'t heard of them brunch chambray hell of pour-over vexillologist tacos intelligentsia ugh meggings street art tumeric. Live-edge sustainable asymmetrical crucifix, hot chicken tilde lumbersexual.',
+                'options': [
+                    {
+                        'id': 10,
+                        'details': 'Nokia 8 5.3 inch 32GB',
+                        'price': '58000'
+                    },
+                    {
+                        'id': 11,
+                        'details': 'iPhone 8Plus 5.5 inch 64GB',
+                        'price': '120000'
+                    },
+                    {
+                        'id': 12,
+                        'details': 'Samsung Galaxy S8 5.8 inch 64GB',
+                        'price': '73000'
+                    },
+                    {
+                        'id': 13,
+                        'details': 'Huawei Mate 9 Pro 5.5 inch 128GB',
+                        'price': '73000'
+                    },
+                    {
+                        'id': 14,
+                        'details': 'Huawei Mate 10 5.9 inch 64GB',
+                        'price': '75000'
+                    }
+                ]
+            }
+        ];
+
+        var incart = [
+            {
+                'id': 1,
+                'price': '2600',
+                'listitem': 'USB Stick - 16GB',
+                'quantity': 4
+            },
+            {
+                'id': 12,
+                'price': '73000',
+                'listitem': 'Phones - Samsung Galaxy S8 5.8 inch 64GB',
+                'quantity': 1
+            }
+        ];
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                search: '',
+                order: 1,
+                products: inventory,
+                shopping_cart: incart,
+                subtotal: 0
+            },
+            filters: {
+                uppercase: function (value) {
+                    // Convert string value to uppercase
+                    return value.toUpperCase();
+                },
+                currency: function (value) {
+                    // Parse value to a float
+                    var number = parseFloat(value).toFixed(2);
+
+                    // Insert thousands separator
+                    return 'KES ' + new Intl.NumberFormat().format(number);
+                }
+            },
+            computed: {
+                filteredItems: function() {
+                    var self = this;
+
+                    return self.products.filter(function(product) {
+                        return product.name.indexOf(self.search) !== -1;
+                    });
+                }
+            }
+        });
+    </script>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="assets/jquery/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
