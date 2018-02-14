@@ -20,7 +20,7 @@
     </nav>
     <div class="container" id="app">
         <div class="row mt-2 mb-2">
-            <div class="col-sm-12 col-md-6">
+            <div class="col-sm-12 col-md-12">
                 <p class="lead">
                     Products
                 </p>
@@ -53,21 +53,40 @@
                     </a>
                 </div>
             </div>
-            <div class="col-sm-12 col-md-6">
+        </div>
+        <div class="row mt-2 mb-2">
+            <div class="col-md-12 col-sm-12">
                 <p class="lead">
                     Shopping Cart
                 </p>
-                <div class="card text-center mt-2 mb-2" v-for="item in shopping_cart">
+                <div class="card mt-2 mb-2">
                     <div class="card-header">
-                        Item ID: {{ item.id }}
+                        All Items in Cart
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">{{ item.listitem }}</h5>
-                        <p class="card-text">{{ item.quantity }} @ {{ item.price | currency  }}</p>
-                        <a href="#" class="btn btn-primary">Pay</a>
+                        <h5 class="card-title">Items</h5>
+                        <table class="table table-dark">
+                            <thead class="thead-light">
+                                <tr>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Item</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">SubTotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="item in shopping_cart">
+                                    <td>{{ item.quantity }}</td>
+                                    <td>{{ item.listitem }}</td>
+                                    <td>{{ item.price | currency  }}</td>
+                                    <td>{{ item | subtotal | currency }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div class="card-footer text-muted">
-                        Total: {{ item | subtotal | currency }}
+                        <span class="align-bottom float-left">Count: {{ count }}</span> 
+                        <span class="align-bottom float-right">Total: {{ total | currency }}</span> 
                     </div>
                 </div>
             </div>
@@ -231,6 +250,30 @@
                     return self.products.filter(function(product) {
                         return product.name.indexOf(self.search) !== -1;
                     });
+                },
+                count: function() {
+                    var items = this.shopping_cart;
+                    var itemsCount = 0;
+
+                    for(var key in items) {
+                        var item = items[key];
+
+                        itemsCount = itemsCount + parseInt(item.quantity);
+                    }
+
+                    return itemsCount;
+                },
+                total: function() {
+                    var items = this.shopping_cart;
+                    var itemsTotal = 0;
+                    
+                    for(var key in items) {
+                        var item = items[key];
+
+                        itemsTotal = itemsTotal + parseInt(item.quantity * item.price);
+                    }
+
+                    return itemsTotal;
                 }
             }
         });
