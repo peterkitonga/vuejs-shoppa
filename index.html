@@ -19,7 +19,7 @@
         </form>
     </nav>
     <div class="container" id="app">
-        <div class="row">
+        <div class="row mt-2 mb-2">
             <div class="col-sm-12 col-md-6">
                 <p class="lead">
                     Products
@@ -34,17 +34,45 @@
                             <h5 class="mb-1">{{ product.name | uppercase }}</h5>
                         </div>
                         <p class="mb-1">{{ product.description }}</p>
-                        <ul>
-                            <li v-for="option in product.options"><b>Name: {{ option.details }}</b><small> {{ option.price | currency }}</small></li>
-                        </ul>
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Details</th>
+                                    <th scope="col">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="option in product.options">
+                                    <td>{{ option.id }}</td>
+                                    <td>{{ option.details }}</td>
+                                    <td>{{ option.price | currency }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </a>
                 </div>
             </div>
             <div class="col-sm-12 col-md-6">
-
+                <p class="lead">
+                    Shopping Cart
+                </p>
+                <div class="card text-center mt-2 mb-2" v-for="item in shopping_cart">
+                    <div class="card-header">
+                        Item ID: {{ item.id }}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.listitem }}</h5>
+                        <p class="card-text">{{ item.quantity }} @ {{ item.price | currency  }}</p>
+                        <a href="#" class="btn btn-primary">Pay</a>
+                    </div>
+                    <div class="card-footer text-muted">
+                        Total: {{ item | subtotal | currency }}
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row mt-2 mb-2">
             <div class="col-sm-12 col-md-12">
                 <div class="jumbotron jumbotron-fluid">
                     <div class="container">
@@ -191,6 +219,9 @@
 
                     // Insert thousands separator
                     return 'KES ' + new Intl.NumberFormat().format(number);
+                },
+                subtotal: function(value) {
+                    return value.price * value.quantity;
                 }
             },
             computed: {
