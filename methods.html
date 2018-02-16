@@ -25,7 +25,7 @@
                 <button type="button" class="btn btn-primary mt-2 mb-2" data-toggle="button" aria-pressed="false" autocomplete="off" v-on:click="toggleValue">
                     Click Me
                 </button>
-                <button type="button" class="btn btn-outline-primary" v-on:mouseover="toggleValue">
+                <button type="button" class="btn" v-on:mouseover="toggleValue" v-bind:class="[{'btn-outline-danger' : status}, 'btn-outline-primary']">
                     Hover Me
                 </button>
                 <div class="card mt-2 mb-2">
