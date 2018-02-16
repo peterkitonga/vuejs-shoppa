@@ -37,12 +37,24 @@
             </div>
         </div>
     </div>
+    <template id="cars">
+        <div class="container">
+            <div class="row mt-1 mb-1">
+                <div class="col-md-12 col-sm-12">
+                    <div class="card mt-2 mb-2">
+                        <h4 class="card-header">{{make}}</h4>
+                        <div class="card-body">This is a car model right here.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
 
     <!-- VueJS JavaScript -->
     <script src="assets/vuejs/vue.js"></script>
     <script>
         Vue.component('cars', {
-            template: '<div class="card mt-2 mb-2"><h4 class="card-header">{{make}}</h4><div class="card-body">This is a car model right here.</div></div>',
+            template: '#cars',
             props: ['make']
         });
 
