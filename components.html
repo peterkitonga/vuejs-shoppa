@@ -21,7 +21,9 @@
     <div class="container" id="app">
         <div class="row mt-1 mb-1">
             <div class="col-sm-12 col-md-12">
-                <cars></cars>
+                <cars make="Ford"></cars>
+                <cars make="BMW"></cars>
+                <cars make="Honda"></cars>
             </div>
         </div>
         <div class="row mt-1 mb-1">
@@ -40,7 +42,8 @@
     <script src="assets/vuejs/vue.js"></script>
     <script>
         Vue.component('cars', {
-            template: '<div class="card"><div class="card-body">This is a car model right here.</div></div>'
+            template: '<div class="card mt-2 mb-2"><h4 class="card-header">{{make}}</h4><div class="card-body">This is a car model right here.</div></div>',
+            props: ['make']
         });
 
         var app = new Vue({
