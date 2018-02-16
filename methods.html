@@ -21,8 +21,12 @@
     <div class="container" id="app">
         <div class="row mt-1 mb-1">
             <div class="col-sm-12 col-md-12">
+                <p class="lead mt-2">{{type}} <mark>{{count}}</mark></p>
                 <button type="button" class="btn btn-primary mt-2 mb-2" data-toggle="button" aria-pressed="false" autocomplete="off" v-on:click="toggleValue">
                     Click Me
+                </button>
+                <button type="button" class="btn btn-outline-primary" v-on:mouseover="toggleValue">
+                    Hover Me
                 </button>
                 <div class="card mt-2 mb-2">
                     <div class="card-body">
@@ -68,11 +72,15 @@
             data: {
                 quote: '<p class="mb-0">"Things change. And friends leave. Life doesn\'t stop for anybody."</p><footer class="blockquote-footer">Stephen Chbosky in <cite title="The Perks of Being a Wallflower">The Perks of Being a Wallflower</cite></footer>',
                 negate: '<p class="mb-0">"You cannot have a positive life and a negative mind."</p><footer class="blockquote-footer">Joyce Meyer</footer>',
+                type: 'None',
+                count: 0,
                 status: true
             },
             methods: {
-                toggleValue: function() {
+                toggleValue: function(value) {
                     this.status = this.status != true;
+                    this.count++;
+                    this.type = value.type;
                 }
             }
         });
