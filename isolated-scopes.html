@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Shoppa</title>
+</head>
+<body>
+    <nav class="navbar navbar-light bg-light justify-content-between">
+        <a class="navbar-brand">Navbar</a>
+        <form class="form-inline">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </nav>
+    <div class="container" id="app">
+        <div class="row mt-1 mb-1">
+            <div class="col-sm-12 col-md-12">
+                <cars make="Ford"></cars>
+                <cars make="BMW"></cars>
+                <cars make="Honda"></cars>
+            </div>
+        </div>
+        <div class="row mt-1 mb-1">
+            <div class="col-sm-12 col-md-12">
+                <div class="jumbotron jumbotron-fluid">
+                    <div class="container">
+                        <h4 class="display-4">Json Payload</h4>
+                        <pre>{{ $data }}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <template id="cars">
+        <div class="container">
+            <div class="row mt-1 mb-1">
+                <div class="col-md-12 col-sm-12">
+                    <div class="card mt-2 mb-2">
+                        <h4 class="card-header">{{make}} - {{ count }}</h4>
+                        <div class="card-body">This is a car model right here.</div>
+                        <button type="button" class="btn btn-primary" @click="vote">Vote</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- VueJS JavaScript -->
+    <script src="assets/vuejs/vue.js"></script>
+    <script>
+        Vue.component('cars', {
+            template: '#cars',
+            props: ['make'],
+            methods: {
+                vote: function() {
+                    this.count++;
+                }
+            },
+            data: function() {
+                return {
+                    count: 0
+                }
+            }
+        });
+
+        var app = new Vue({
+            el: '#app',
+            data: {}
+        });
+    </script>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="assets/jquery/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
