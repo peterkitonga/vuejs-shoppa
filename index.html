@@ -24,12 +24,28 @@
                 <p class="lead">
                     Products
                 </p>
-                <div class="form-group">
-                    <label for="search-field">Search a Product</label>
-                    <input type="text" class="form-control" id="search-field" v-model="search">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-secondary">Ordered By: {{ order === 1 ? 'Descending' : 'Ascending' }}</button>
+                            <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <h6 class="dropdown-header">Sorting Options</h6>
+                                <a class="dropdown-item" href="#" v-on:click="sort('asc')">Ascending</a>
+                                <a class="dropdown-item" href="#" v-on:click="sort('desc')">Descending</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="search-field" v-model="search" placeholder="Search a Product">
+                        </div>
+                    </div>
                 </div>
                 <div class="list-group">
-                    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start" v-for="product in filteredItems">
+                    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start" v-for="product in filteredAndSortedItems">
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">{{ product.name | uppercase }}</h5>
                         </div>
@@ -104,6 +120,7 @@
     </div>
 
     <!-- VueJS JavaScript -->
+    <script src="assets/lodash/lodash.min.js"></script>
     <script src="assets/vuejs/vue.js"></script>
     <script>
         var inventory = [
@@ -223,6 +240,7 @@
             data: {
                 search: '',
                 order: 1,
+                para: 'desc',
                 products: inventory,
                 shopping_cart: incart,
                 subtotal: 0
@@ -243,13 +261,27 @@
                     return value.price * value.quantity;
                 }
             },
+            methods: {
+                sort: function(i) {
+                    this.order = this.order * -1;
+                    this.para = i;
+                }
+            },
             computed: {
-                filteredItems: function() {
+                filteredAndSortedItems: function() {
                     var self = this;
 
-                    return self.products.filter(function(product) {
-                        return product.name.indexOf(self.search) !== -1;
-                    });
+                    // Apply filter first if a search value has been entered
+                    let result = self.products;
+                    if(this.search)
+                    {
+                        result = result.filter(function(product) {
+                            return product.name.indexOf(self.search) !== -1;
+                        });
+                    }
+
+                    // Sort the remaining values
+                    return _.orderBy(result, ['name'], [this.para]);
                 },
                 count: function() {
                     var items = this.shopping_cart;
