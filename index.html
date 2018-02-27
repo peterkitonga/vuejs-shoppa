@@ -27,7 +27,7 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-secondary">Ordered By: {{ order === 1 ? 'Descending' : 'Ascending' }}</button>
+                            <button type="button" class="btn btn-secondary">Ordered By: {{ order === 'desc' ? 'Descending' : 'Ascending' }}</button>
                             <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
@@ -239,8 +239,7 @@
             el: '#app',
             data: {
                 search: '',
-                order: 1,
-                para: 'desc',
+                order: 'desc',
                 products: inventory,
                 shopping_cart: incart,
                 subtotal: 0
@@ -263,8 +262,7 @@
             },
             methods: {
                 sort: function(i) {
-                    this.order = this.order * -1;
-                    this.para = i;
+                    this.order = i;
                 }
             },
             computed: {
@@ -281,7 +279,7 @@
                     }
 
                     // Sort the remaining values
-                    return _.orderBy(result, ['name'], [this.para]);
+                    return _.orderBy(result, ['name'], [this.order]);
                 },
                 count: function() {
                     var items = this.shopping_cart;
