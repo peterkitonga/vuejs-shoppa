@@ -33,8 +33,8 @@
                             </button>
                             <div class="dropdown-menu">
                                 <h6 class="dropdown-header">Sorting Options</h6>
-                                <a class="dropdown-item" href="#" v-on:click="sort('asc')">Ascending</a>
-                                <a class="dropdown-item" href="#" v-on:click="sort('desc')">Descending</a>
+                                <a class="dropdown-item" href="#" v-on:click="changeDirection('asc')">Ascending</a>
+                                <a class="dropdown-item" href="#" v-on:click="changeDirection('desc')">Descending</a>
                             </div>
                         </div>
                     </div>
@@ -261,7 +261,7 @@
                 }
             },
             methods: {
-                sort: function(i) {
+                changeDirection: function(i) {
                     this.order = i;
                 }
             },
