@@ -56,6 +56,7 @@
                                     <th scope="col">#</th>
                                     <th scope="col">Details</th>
                                     <th scope="col">Price</th>
+                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -63,6 +64,7 @@
                                     <td>{{ option.id }}</td>
                                     <td>{{ option.details }}</td>
                                     <td>{{ option.price | currency }}</td>
+                                    <td><button type="button" class="btn btn-primary btn-sm" v-on:click="addItem(product, option)">Add</button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -220,28 +222,13 @@
             }
         ];
 
-        var incart = [
-            {
-                'id': 1,
-                'price': '2600',
-                'listitem': 'USB Stick - 16GB',
-                'quantity': 4
-            },
-            {
-                'id': 12,
-                'price': '73000',
-                'listitem': 'Phones - Samsung Galaxy S8 5.8 inch 64GB',
-                'quantity': 1
-            }
-        ];
-
         var app = new Vue({
             el: '#app',
             data: {
                 search: '',
                 order: 'desc',
                 products: inventory,
-                shopping_cart: incart,
+                shopping_cart: [],
                 subtotal: 0
             },
             filters: {
@@ -263,6 +250,31 @@
             methods: {
                 changeDirection: function(i) {
                     this.order = i;
+                },
+                addItem: function(product, option) {
+                    var newPrice = option.price
+                    var newName = product.name +':'+ option.details
+                    var newQuantity = 1
+                    var items = this.shopping_cart
+
+                    for(var key in items) {
+                        var item = items[key]
+
+                        if(option.id === item.id) {
+                            newQuantity = parseInt(item.quantity) + 1
+                            var index = this.shopping_cart.indexOf(item)
+                            this.shopping_cart.splice(index, 1)
+                        }
+                    }
+
+                    var newCartItems = {
+                        id: option.id,
+                        price: newPrice,
+                        listitem: newName,
+                        quantity: newQuantity
+                    }
+
+                    this.shopping_cart.push(newCartItems)
                 }
             },
             computed: {
