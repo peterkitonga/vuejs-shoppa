@@ -44,8 +44,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="list-group">
-                    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start" v-for="product in filteredAndSortedItems">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-action flex-column align-items-start" v-for="product in filteredAndSortedItems">
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">{{ product.name | uppercase }}</h5>
                         </div>
@@ -68,9 +68,9 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </a>
+                    </li>
                 </div>
-            </div>
+            </ul>
         </div>
         <div class="row mt-2 mb-2">
             <div class="col-md-12 col-sm-12">
