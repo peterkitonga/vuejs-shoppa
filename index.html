@@ -7,6 +7,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/themify/css/themify-icons.css">
 
     <title>Shoppa</title>
 </head>
@@ -79,7 +80,7 @@
                 </p>
                 <div class="card mt-2 mb-2">
                     <div class="card-header">
-                        All Items in Cart
+                        All Items in Cart <i class="ti-minus"></i>
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">Items</h5>
@@ -90,14 +91,23 @@
                                 <th scope="col">Item</th>
                                 <th scope="col">Price</th>
                                 <th scope="col">SubTotal</th>
+                                <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="item in shopping_cart">
-                                    <td>{{ item.quantity }}</td>
+                                    <td>
+                                        <!-- {{ item.quantity }} -->
+                                        <div class="button-group" role="group">
+                                            <button type="button" class="btn btn-light btn-sm">{{ item.quantity }}</button>
+                                            <button type="button" class="btn btn-primary btn-sm" v-on:click="incrementItem(item)"><i class="ti-plus"></i></button>
+                                            <button type="button" class="btn btn-primary btn-sm" v-on:click="decrementItem(item)"><i class="ti-minus"></i></button>
+                                        </div>
+                                    </td>
                                     <td>{{ item.listitem }}</td>
                                     <td>{{ item.price | currency  }}</td>
                                     <td>{{ item | subtotal | currency }}</td>
+                                    <td><button type="button" class="btn btn-primary btn-sm" v-on:click="removeItem(item)">Remove</button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -275,6 +285,18 @@
                     }
 
                     this.shopping_cart.push(newCartItems)
+                },
+                incrementItem: function(item) {
+                    item.quantity++
+                },
+                decrementItem: function(item) {
+                    item.quantity--
+                    if(item.quantity <= 0) {
+                        this.shopping_cart.splice(item, 1)
+                    }
+                },
+                removeItem: function(item) {
+                    this.shopping_cart.splice(item, 1)
                 }
             },
             computed: {
