@@ -78,9 +78,24 @@
                 <p class="lead">
                     Shopping Cart
                 </p>
-                <div class="card mt-2 mb-2">
+                <div class="card border-light mt-2 mb-2">
                     <div class="card-header">
-                        All Items in Cart <i class="ti-minus"></i>
+                        <form>
+                            <div class="form-row">
+                                <div class="col">
+                                    <h4>All Items in Cart</h4>
+                                </div>
+                                <div class="col">
+                                    <input type="number" class="form-control" placeholder="Enter tip amount..." v-model="tip_amount" min="0" max="9999" step="0.25" size="4" number>
+                                </div>
+                                <div class="col">
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-secondary mr-1 ml-1" v-on:click="addTip()">Add Tip</button>
+                                        <button type="button" class="btn btn-danger mr-1 ml-1">Clear List</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">Items</h5>
@@ -97,11 +112,12 @@
                             <tbody>
                                 <tr v-for="item in shopping_cart">
                                     <td>
-                                        <!-- {{ item.quantity }} -->
                                         <div class="button-group" role="group">
                                             <button type="button" class="btn btn-light btn-sm">{{ item.quantity }}</button>
-                                            <button type="button" class="btn btn-primary btn-sm" v-on:click="incrementItem(item)"><i class="ti-plus"></i></button>
-                                            <button type="button" class="btn btn-primary btn-sm" v-on:click="decrementItem(item)"><i class="ti-minus"></i></button>
+                                            <span v-if="item.listitem !== 'Extra Tip'">
+                                                <button type="button" class="btn btn-primary btn-sm" v-on:click="incrementItem(item)"><i class="ti-plus"></i></button>
+                                                <button type="button" class="btn btn-primary btn-sm" v-on:click="decrementItem(item)"><i class="ti-minus"></i></button>
+                                            </span>
                                         </div>
                                     </td>
                                     <td>{{ item.listitem }}</td>
@@ -114,7 +130,7 @@
                     </div>
                     <div class="card-footer text-muted">
                         <span class="align-bottom float-left">Count: {{ count }}</span> 
-                        <span class="align-bottom float-right">Total: {{ total | currency }}</span> 
+                        <span class="align-bottom float-right">Total: {{ total | currency }}</span>
                     </div>
                 </div>
             </div>
@@ -239,7 +255,9 @@
                 order: 'desc',
                 products: inventory,
                 shopping_cart: [],
-                subtotal: 0
+                subtotal: 0,
+                tip_amount: 10,
+                deal: 0
             },
             filters: {
                 uppercase: function (value) {
@@ -297,6 +315,18 @@
                 },
                 removeItem: function(item) {
                     this.shopping_cart.splice(item, 1)
+                },
+                addTip: function() {
+                    var date = new Date(Date.now());
+                    
+                    var newValue = {
+                        id: date.getTime(),
+                        price: this.tip_amount,
+                        listitem: 'Extra Tip',
+                        quantity: 1
+                    }
+
+                    this.shopping_cart.push(newValue)
                 }
             },
             computed: {
