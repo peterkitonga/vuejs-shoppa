@@ -314,7 +314,8 @@
                     }
                 },
                 removeItem: function(item) {
-                    this.shopping_cart.splice(item, 1)
+                    var index = this.shopping_cart.indexOf(item)
+                    this.shopping_cart.splice(index, 1)
                 },
                 addTip: function() {
                     var date = new Date(Date.now());
