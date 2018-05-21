@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -12,370 +12,384 @@
     <title>Shoppa</title>
 </head>
 <body>
-    <nav class="navbar navbar-light bg-light justify-content-between">
-        <a class="navbar-brand">Navbar</a>
-        <form class="form-inline">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
-    </nav>
-    <div class="container" id="app">
-        <div class="row mt-2 mb-2">
-            <div class="col-sm-12 col-md-12">
-                <p class="lead">
-                    Products
-                </p>
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-secondary">Ordered By: {{ order === 'desc' ? 'Descending' : 'Ascending' }}</button>
-                            <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <div class="dropdown-menu">
-                                <h6 class="dropdown-header">Sorting Options</h6>
-                                <a class="dropdown-item" href="#" v-on:click="changeDirection('asc')">Ascending</a>
-                                <a class="dropdown-item" href="#" v-on:click="changeDirection('desc')">Descending</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-9">
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="search-field" v-model="search" placeholder="Search a Product">
+<nav class="navbar navbar-light bg-light justify-content-between">
+    <a class="navbar-brand">Navbar</a>
+    <form class="form-inline">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+</nav>
+<div class="container" id="app">
+    <div class="row mt-2 mb-2">
+        <div class="col-sm-12 col-md-12">
+            <p class="lead">
+                Products
+            </p>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary">Ordered By: {{ order === 'desc' ? 'Descending' : 'Ascending' }}</button>
+                        <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu">
+                            <h6 class="dropdown-header">Sorting Options</h6>
+                            <a class="dropdown-item" href="#" v-on:click="changeDirection('asc')">Ascending</a>
+                            <a class="dropdown-item" href="#" v-on:click="changeDirection('desc')">Descending</a>
                         </div>
                     </div>
                 </div>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-action flex-column align-items-start" v-for="product in filteredAndSortedItems">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">{{ product.name | uppercase }}</h5>
-                        </div>
-                        <p class="mb-1">{{ product.description }}</p>
-                        <table class="table">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Details</th>
-                                    <th scope="col">Price</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="option in product.options">
-                                    <td>{{ option.id }}</td>
-                                    <td>{{ option.details }}</td>
-                                    <td>{{ option.price | currency }}</td>
-                                    <td><button type="button" class="btn btn-primary btn-sm" v-on:click="addItem(product, option)">Add</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </li>
-                </div>
-            </ul>
-        </div>
-        <div class="row mt-2 mb-2">
-            <div class="col-md-12 col-sm-12">
-                <p class="lead">
-                    Shopping Cart
-                </p>
-                <div class="card border-light mt-2 mb-2">
-                    <div class="card-header">
-                        <form>
-                            <div class="form-row">
-                                <div class="col">
-                                    <h4>All Items in Cart</h4>
-                                </div>
-                                <div class="col">
-                                    <input type="number" class="form-control" placeholder="Enter tip amount..." v-model="tip_amount" min="0" max="9999" step="0.25" size="4" number>
-                                </div>
-                                <div class="col">
-                                    <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-secondary mr-1 ml-1" v-on:click="addTip()">Add Tip</button>
-                                        <button type="button" class="btn btn-danger mr-1 ml-1">Clear List</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Items</h5>
-                        <table class="table table-dark">
-                            <thead class="thead-light">
-                                <tr>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Item</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">SubTotal</th>
-                                <th scope="col">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="item in shopping_cart">
-                                    <td>
-                                        <div class="button-group" role="group">
-                                            <button type="button" class="btn btn-light btn-sm">{{ item.quantity }}</button>
-                                            <span v-if="item.listitem !== 'Extra Tip'">
-                                                <button type="button" class="btn btn-primary btn-sm" v-on:click="incrementItem(item)"><i class="ti-plus"></i></button>
-                                                <button type="button" class="btn btn-primary btn-sm" v-on:click="decrementItem(item)"><i class="ti-minus"></i></button>
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td>{{ item.listitem }}</td>
-                                    <td>{{ item.price | currency  }}</td>
-                                    <td>{{ item | subtotal | currency }}</td>
-                                    <td><button type="button" class="btn btn-primary btn-sm" v-on:click="removeItem(item)">Remove</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="card-footer text-muted">
-                        <span class="align-bottom float-left">Count: {{ count }}</span> 
-                        <span class="align-bottom float-right">Total: {{ total | currency }}</span>
+                <div class="col-md-9">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="search-field" v-model="search" placeholder="Search a Product">
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row mt-2 mb-2">
-            <div class="col-sm-12 col-md-12">
-                <div class="jumbotron jumbotron-fluid">
-                    <div class="container">
-                        <h4 class="display-4">Json Payload</h4>
-                        <pre>{{ $data }}</pre>
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-action flex-column align-items-start" v-for="product in filteredAndSortedItems">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ product.name | uppercase }}</h5>
                     </div>
+                    <p class="mb-1">{{ product.description }}</p>
+                    <table class="table">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Details</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="option in product.options">
+                            <td>{{ option.id }}</td>
+                            <td>{{ option.details }}</td>
+                            <td>{{ option.price | currency }}</td>
+                            <td><button type="button" class="btn btn-primary btn-sm" v-on:click="addItem(product, option)">Add</button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row mt-2 mb-2">
+        <div class="col-md-12 col-sm-12">
+            <p class="lead">
+                Shopping Cart
+            </p>
+            <div class="card border-light mt-2 mb-2">
+                <div class="card-header">
+                    <form>
+                        <div class="form-row">
+                            <div class="col">
+                                <h4>All Items in Cart</h4>
+                            </div>
+                            <div class="col">
+                                <input type="number" class="form-control" placeholder="Enter tip amount..." v-model="tip_amount" min="0" max="9999" step="0.25" size="4" number>
+                            </div>
+                            <div class="col">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-secondary mr-1 ml-1" v-on:click="addTip()">Add Tip</button>
+                                    <button type="button" class="btn btn-danger mr-1 ml-1" v-on:click="clearItems">Clear List</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Items</h5>
+                    <table class="table table-dark">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Item</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">SubTotal</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="item in shopping_cart">
+                            <td>
+                                <div class="button-group" role="group">
+                                    <button type="button" class="btn btn-light btn-sm">{{ item.quantity }}</button>
+                                    <span v-if="item.listitem !== 'Extra Tip'">
+                                        <button type="button" class="btn btn-primary btn-sm" v-on:click="incrementItem(item)"><i class="ti-plus"></i></button>
+                                        <button type="button" class="btn btn-primary btn-sm" v-on:click="decrementItem(item)"><i class="ti-minus"></i></button>
+                                    </span>
+                                </div>
+                            </td>
+                            <td>{{ item.listitem }}</td>
+                            <td>{{ item.price | currency  }}</td>
+                            <td>{{ item | subtotal | currency }}</td>
+                            <td><button type="button" class="btn btn-primary btn-sm" v-on:click="removeItem(item)">Remove</button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <p v-if="total > 100000">DISCOUNT: {{ discounted | currency }}</p>
+                    <p v-else>Buy goods worth over 100000 and get 10% off</p>
+                </div>
+                <div :class="[total > 100000 ? 'text-success' : 'text-muted', 'card-footer']">
+                    <span class="align-bottom float-left">Count: {{ count }}</span>
+                    <span class="align-bottom float-right">Total: {{ (total - discounted) | currency }}</span>
                 </div>
             </div>
         </div>
     </div>
+    <div class="row mt-2 mb-2">
+        <div class="col-sm-12 col-md-12">
+            <div class="jumbotron jumbotron-fluid">
+                <div class="container">
+                    <h4 class="display-4">Json Payload</h4>
+                    <pre>{{ $data }}</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <!-- VueJS JavaScript -->
-    <script src="assets/lodash/lodash.min.js"></script>
-    <script src="assets/vuejs/vue.js"></script>
-    <script>
-        var inventory = [
-            {
-                'name': 'USB Stick',
-                'description': 'Lorem ipsum dolor amet sustainable narwhal man braid etsy freegan. Shoreditch slow-carb literally quinoa tbh freegan roof party hoodie photo booth wayfarers. Ennui cornhole post-ironic waistcoat. Poutine authentic vexillologist helvetica gochujang, neutra meggings edison bulb bicycle rights four loko.',
-                'options': [
-                    {
-                        'id': 1,
-                        'details': '16GB',
-                        'price': '650'
-                    },
-                    {
-                        'id': 2,
-                        'details': '32GB',
-                        'price': '1050'
-                    },
-                    {
-                        'id': 3,
-                        'details': '64GB',
-                        'price': '1650'
-                    }
-                ]
+<!-- VueJS JavaScript -->
+<script src="assets/lodash/lodash.min.js"></script>
+<script src="assets/vuejs/vue.js"></script>
+<script>
+    var inventory = [
+        {
+            'name': 'USB Stick',
+            'description': 'Lorem ipsum dolor amet sustainable narwhal man braid etsy freegan. Shoreditch slow-carb literally quinoa tbh freegan roof party hoodie photo booth wayfarers. Ennui cornhole post-ironic waistcoat. Poutine authentic vexillologist helvetica gochujang, neutra meggings edison bulb bicycle rights four loko.',
+            'options': [
+                {
+                    'id': 1,
+                    'details': '16GB',
+                    'price': '650'
+                },
+                {
+                    'id': 2,
+                    'details': '32GB',
+                    'price': '1050'
+                },
+                {
+                    'id': 3,
+                    'details': '64GB',
+                    'price': '1650'
+                }
+            ]
+        },
+        {
+            'name': 'USB Plug',
+            'description': ' Ethical pok pok flannel, cold-pressed poutine messenger bag dreamcatcher wolf brooklyn adaptogen hammock four dollar toast blue bottle gochujang asymmetrical. Poutine food truck hell of palo santo subway tile photo booth post-ironic art party gastropub bitters actually. Selfies pickled try-hard +1 celiac dreamcatcher.',
+            'options': [
+                {
+                    'id': 4,
+                    'details': 'Micro USB to Type-A',
+                    'price': '1000'
+                },
+                {
+                    'id': 5,
+                    'details': 'Type-C to Type-C',
+                    'price': '2000'
+                }
+            ]
+        },
+        {
+            'name': 'Televisions',
+            'description': 'Chartreuse before they sold out keytar snackwave. Woke put a bird on it narwhal austin thundercats listicle semiotics. Irony etsy cardigan helvetica. Messenger bag lyft XOXO iceland migas cred fixie paleo umami fashion axe. Sriracha salvia kale chips, plaid PBR&B direct trade ennui. Mustache vaporware chartreuse tumeric leggings seitan.',
+            'options': [
+                {
+                    'id': 6,
+                    'details': 'Samsung 4K UHD 40 inch TV',
+                    'price': '75000'
+                },
+                {
+                    'id': 7,
+                    'details': 'LG OLED Curved 40 inch TV',
+                    'price': '300000'
+                },
+                {
+                    'id': 8,
+                    'details': 'HiSense Full HD 40 inch TV',
+                    'price': '55000'
+                },
+                {
+                    'id': 9,
+                    'details': 'LG HD LED 40 inch TV',
+                    'price': '56000'
+                }
+            ]
+        },
+        {
+            'name': 'Phones',
+            'description': 'Tumblr flannel chia, green juice pork belly farm-to-table blue bottle vegan. Pour-over direct trade cliche meditation. You probably haven\'t heard of them brunch chambray hell of pour-over vexillologist tacos intelligentsia ugh meggings street art tumeric. Live-edge sustainable asymmetrical crucifix, hot chicken tilde lumbersexual.',
+            'options': [
+                {
+                    'id': 10,
+                    'details': 'Nokia 8 5.3 inch 32GB',
+                    'price': '58000'
+                },
+                {
+                    'id': 11,
+                    'details': 'iPhone 8Plus 5.5 inch 64GB',
+                    'price': '120000'
+                },
+                {
+                    'id': 12,
+                    'details': 'Samsung Galaxy S8 5.8 inch 64GB',
+                    'price': '73000'
+                },
+                {
+                    'id': 13,
+                    'details': 'Huawei Mate 9 Pro 5.5 inch 128GB',
+                    'price': '73000'
+                },
+                {
+                    'id': 14,
+                    'details': 'Huawei Mate 10 5.9 inch 64GB',
+                    'price': '75000'
+                }
+            ]
+        }
+    ];
+
+    new Vue({
+        el: '#app',
+        data: {
+            search: '',
+            order: 'desc',
+            products: inventory,
+            shopping_cart: [],
+            subtotal: 0,
+            tip_amount: 10,
+            deal: 0
+        },
+        filters: {
+            uppercase: function (value) {
+                // Convert string value to uppercase
+                return value.toUpperCase();
             },
-            {
-                'name': 'USB Plug',
-                'description': ' Ethical pok pok flannel, cold-pressed poutine messenger bag dreamcatcher wolf brooklyn adaptogen hammock four dollar toast blue bottle gochujang asymmetrical. Poutine food truck hell of palo santo subway tile photo booth post-ironic art party gastropub bitters actually. Selfies pickled try-hard +1 celiac dreamcatcher.',
-                'options': [
-                    {
-                        'id': 4,
-                        'details': 'Micro USB to Type-A',
-                        'price': '1000'
-                    },
-                    {
-                        'id': 5,
-                        'details': 'Type-C to Type-C',
-                        'price': '2000'
-                    }
-                ]
+            currency: function (value) {
+                // Parse value to a float
+                var number = parseFloat(value).toFixed(2);
+
+                // Insert thousands separator
+                return 'KES ' + new Intl.NumberFormat().format(number);
             },
-            {
-                'name': 'Televisions',
-                'description': 'Chartreuse before they sold out keytar snackwave. Woke put a bird on it narwhal austin thundercats listicle semiotics. Irony etsy cardigan helvetica. Messenger bag lyft XOXO iceland migas cred fixie paleo umami fashion axe. Sriracha salvia kale chips, plaid PBR&B direct trade ennui. Mustache vaporware chartreuse tumeric leggings seitan.',
-                'options': [
-                    {
-                        'id': 6,
-                        'details': 'Samsung 4K UHD 40 inch TV',
-                        'price': '75000'
-                    },
-                    {
-                        'id': 7,
-                        'details': 'LG OLED Curved 40 inch TV',
-                        'price': '300000'
-                    },
-                    {
-                        'id': 8,
-                        'details': 'HiSense Full HD 40 inch TV',
-                        'price': '55000'
-                    },
-                    {
-                        'id': 9,
-                        'details': 'LG HD LED 40 inch TV',
-                        'price': '56000'
-                    }
-                ]
-            },
-            {
-                'name': 'Phones',
-                'description': 'Tumblr flannel chia, green juice pork belly farm-to-table blue bottle vegan. Pour-over direct trade cliche meditation. You probably haven\'t heard of them brunch chambray hell of pour-over vexillologist tacos intelligentsia ugh meggings street art tumeric. Live-edge sustainable asymmetrical crucifix, hot chicken tilde lumbersexual.',
-                'options': [
-                    {
-                        'id': 10,
-                        'details': 'Nokia 8 5.3 inch 32GB',
-                        'price': '58000'
-                    },
-                    {
-                        'id': 11,
-                        'details': 'iPhone 8Plus 5.5 inch 64GB',
-                        'price': '120000'
-                    },
-                    {
-                        'id': 12,
-                        'details': 'Samsung Galaxy S8 5.8 inch 64GB',
-                        'price': '73000'
-                    },
-                    {
-                        'id': 13,
-                        'details': 'Huawei Mate 9 Pro 5.5 inch 128GB',
-                        'price': '73000'
-                    },
-                    {
-                        'id': 14,
-                        'details': 'Huawei Mate 10 5.9 inch 64GB',
-                        'price': '75000'
-                    }
-                ]
+            subtotal: function(value) {
+                return value.price * value.quantity;
             }
-        ];
-
-        var app = new Vue({
-            el: '#app',
-            data: {
-                search: '',
-                order: 'desc',
-                products: inventory,
-                shopping_cart: [],
-                subtotal: 0,
-                tip_amount: 10,
-                deal: 0
+        },
+        methods: {
+            changeDirection: function(i) {
+                this.order = i;
             },
-            filters: {
-                uppercase: function (value) {
-                    // Convert string value to uppercase
-                    return value.toUpperCase();
-                },
-                currency: function (value) {
-                    // Parse value to a float
-                    var number = parseFloat(value).toFixed(2);
+            addItem: function(product, option) {
+                var newPrice = option.price
+                var newName = product.name +':'+ option.details
+                var newQuantity = 1
+                var items = this.shopping_cart
 
-                    // Insert thousands separator
-                    return 'KES ' + new Intl.NumberFormat().format(number);
-                },
-                subtotal: function(value) {
-                    return value.price * value.quantity;
+                for(var key in items) {
+                    var item = items[key]
+
+                    if(option.id === item.id) {
+                        newQuantity = parseInt(item.quantity) + 1
+                        var index = this.shopping_cart.indexOf(item)
+                        this.shopping_cart.splice(index, 1)
+                    }
+                }
+
+                var newCartItems = {
+                    id: option.id,
+                    price: newPrice,
+                    listitem: newName,
+                    quantity: newQuantity
+                }
+
+                this.shopping_cart.push(newCartItems)
+            },
+            incrementItem: function(item) {
+                item.quantity++
+            },
+            decrementItem: function(item) {
+                item.quantity--
+                if(item.quantity <= 0) {
+                    this.shopping_cart.splice(item, 1)
                 }
             },
-            methods: {
-                changeDirection: function(i) {
-                    this.order = i;
-                },
-                addItem: function(product, option) {
-                    var newPrice = option.price
-                    var newName = product.name +':'+ option.details
-                    var newQuantity = 1
-                    var items = this.shopping_cart
-
-                    for(var key in items) {
-                        var item = items[key]
-
-                        if(option.id === item.id) {
-                            newQuantity = parseInt(item.quantity) + 1
-                            var index = this.shopping_cart.indexOf(item)
-                            this.shopping_cart.splice(index, 1)
-                        }
-                    }
-
-                    var newCartItems = {
-                        id: option.id,
-                        price: newPrice,
-                        listitem: newName,
-                        quantity: newQuantity
-                    }
-
-                    this.shopping_cart.push(newCartItems)
-                },
-                incrementItem: function(item) {
-                    item.quantity++
-                },
-                decrementItem: function(item) {
-                    item.quantity--
-                    if(item.quantity <= 0) {
-                        this.shopping_cart.splice(item, 1)
-                    }
-                },
-                removeItem: function(item) {
-                    var index = this.shopping_cart.indexOf(item)
-                    this.shopping_cart.splice(index, 1)
-                },
-                addTip: function() {
-                    var date = new Date(Date.now());
-                    
-                    var newValue = {
-                        id: date.getTime(),
-                        price: this.tip_amount,
-                        listitem: 'Extra Tip',
-                        quantity: 1
-                    }
-
-                    this.shopping_cart.push(newValue)
-                }
+            removeItem: function(item) {
+                var index = this.shopping_cart.indexOf(item)
+                this.shopping_cart.splice(index, 1)
             },
-            computed: {
-                filteredAndSortedItems: function() {
-                    var self = this;
+            addTip: function() {
+                var date = new Date(Date.now());
 
-                    // Apply filter first if a search value has been entered
-                    let result = self.products;
-                    if(this.search)
-                    {
-                        result = result.filter(function(product) {
-                            return product.name.indexOf(self.search) !== -1;
-                        });
-                    }
+                var newValue = {
+                    id: date.getTime(),
+                    price: this.tip_amount,
+                    listitem: 'Extra Tip',
+                    quantity: 1
+                }
 
-                    // Sort the remaining values
-                    return _.orderBy(result, ['name'], [this.order]);
-                },
-                count: function() {
-                    var items = this.shopping_cart;
-                    var itemsCount = 0;
+                this.shopping_cart.push(newValue)
+            },
+            clearItems: function () {
+                this.shopping_cart = []
+                this.total = 0
+            }
+        },
+        computed: {
+            filteredAndSortedItems: function() {
+                var self = this;
 
-                    for(var key in items) {
-                        var item = items[key];
+                // Apply filter first if a search value has been entered
+                var result = self.products;
+                if(this.search)
+                {
+                    result = result.filter(function(product) {
+                        return product.name.indexOf(self.search) !== -1;
+                    });
+                }
 
-                        itemsCount = itemsCount + parseInt(item.quantity);
-                    }
+                // Sort the remaining values
+                return _.orderBy(result, ['name'], [this.order]);
+            },
+            count: function() {
+                var items = this.shopping_cart;
+                var itemsCount = 0;
 
-                    return itemsCount;
-                },
-                total: function() {
-                    var items = this.shopping_cart;
-                    var itemsTotal = 0;
-                    
-                    for(var key in items) {
-                        var item = items[key];
+                for(var key in items) {
+                    var item = items[key];
 
-                        itemsTotal = itemsTotal + parseInt(item.quantity * item.price);
-                    }
+                    itemsCount = itemsCount + parseInt(item.quantity);
+                }
 
-                    return itemsTotal;
+                return itemsCount;
+            },
+            total: function() {
+                var items = this.shopping_cart;
+                var itemsTotal = 0;
+
+                for(var key in items) {
+                    var item = items[key];
+
+                    itemsTotal = itemsTotal + parseInt(item.quantity * item.price);
+                }
+
+                return itemsTotal;
+            },
+            discounted: function () {
+                if (this.total > 100000)
+                {
+                    return this.total - (this.total * 0.9)
+                } else {
+                    return 0
                 }
             }
-        });
-    </script>
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="assets/jquery/jquery-3.3.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="assets/bootstrap/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        }
+    });
+</script>
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="assets/jquery/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="assets/bootstrap/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
